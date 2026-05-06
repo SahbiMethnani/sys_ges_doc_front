@@ -1,0 +1,64 @@
+/* src/app/app.scss */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:        #0d0f14;
+  --surface:   #13161e;
+  --surface2:  #1b1f2b;
+  --border:    #252938;
+  --accent:    #e8a44a;
+  --accent2:   #5b8dee;
+  --text:      #e2e6f0;
+  --muted:     #5c6178;
+  --success:   #4ade80;
+  --danger:    #f87171;
+  --radius:    12px;
+}
+
+.shell { display: flex; height: 100vh; overflow: hidden; }
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  gap: 32px;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 10px; padding: 0 4px;
+  .brand-icon { font-size: 22px; color: var(--accent); }
+  .brand-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); }
+}
+
+.nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px;
+  color: var(--muted); text-decoration: none; font-size: 13px;
+  transition: all 0.18s;
+  svg { width: 17px; height: 17px; flex-shrink: 0; }
+  &:hover { background: var(--surface2); color: var(--text); }
+  &.active { background: rgba(232,164,74,0.12); color: var(--accent); }
+}
+
+.status-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; border-radius: 8px;
+  font-size: 11px; border: 1px solid var(--border); color: var(--muted);
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  &.online {
+    border-color: rgba(74,222,128,0.25); color: var(--success);
+    .dot { background: var(--success); box-shadow: 0 0 6px var(--success); animation: pulse 2s infinite; }
+  }
+  &.offline { border-color: rgba(248,113,113,0.2); color: var(--danger); .dot { background: var(--danger); } }
+}
+
+.main { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }

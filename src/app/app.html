@@ -1,0 +1,40 @@
+<!-- src/app/app.html -->
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">◈</span>
+      <span class="brand-name">DocRAG</span>
+    </div>
+
+    <nav class="nav">
+      <a routerLink="/chat" routerLinkActive="active" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>Assistant</span>
+      </a>
+      <a routerLink="/documents" routerLinkActive="active" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <span>Documents</span>
+      </a>
+    </nav>
+
+    <div class="status-pill" [class.online]="status?.documents_loaded" [class.offline]="!status?.documents_loaded">
+      <span class="dot"></span>
+      @if (status?.documents_loaded) {
+        <span>{{ status?.total_documents }} doc(s) indexé(s)</span>
+      } @else {
+        <span>Base non chargée</span>
+      }
+    </div>
+  </aside>
+
+  <main class="main">
+    <router-outlet />
+  </main>
+</div>

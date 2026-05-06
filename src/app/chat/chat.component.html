@@ -1,0 +1,114 @@
+<!-- src/app/chat/chat.component.html -->
+<div class="chat-shell">
+
+  <header class="chat-header">
+    <div class="chat-title">
+      <span class="chat-icon">◈</span>
+      <div>
+        <h1>Assistant documentaire</h1>
+        <p>Posez vos questions sur vos documents indexés</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <label class="toggle-wrap">
+        <input type="checkbox" [(ngModel)]="showSources" />
+        <span class="toggle"></span>
+        <span class="toggle-label">Sources</span>
+      </label>
+      <button class="btn-ghost" (click)="clear()" title="Effacer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14H6L5 6"/>
+          <path d="M10 11v6"/><path d="M14 11v6"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="messages">
+
+    @if (messages.length === 0) {
+      <div class="empty">
+        <div class="empty-icon">◈</div>
+        <h2>Prêt à répondre</h2>
+        <p>Posez une question sur vos documents.<br>L'assistant consulte uniquement les documents indexés.</p>
+        <div class="suggestions">
+          <button class="suggestion" (click)="sendSuggestion('Comment réinitialiser mon mot de passe ?')">
+            Comment réinitialiser mon mot de passe ?
+          </button>
+          <button class="suggestion" (click)="sendSuggestion('Comment exporter mes données ?')">
+            Comment exporter mes données ?
+          </button>
+          <button class="suggestion" (click)="sendSuggestion('Comment annuler mon abonnement ?')">
+            Comment annuler mon abonnement ?
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (messages.length > 0) {
+      <div class="message-list">
+        @for (msg of messages; track $index) {
+          <div class="message" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'" [class.error]="msg.error">
+            <div class="bubble">
+              @if (msg.loading) {
+                <div class="typing"><span></span><span></span><span></span></div>
+              }
+              @if (!msg.loading) {
+                <p>{{ msg.text }}</p>
+              }
+              @if (!msg.loading && msg.sources && msg.sources.length > 0) {
+                <div class="sources">
+                  <div class="sources-label">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="12" height="12">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    Sources
+                  </div>
+                  @for (src of msg.sources; track $index) {
+                    <details class="source-item">
+                      <summary>{{ shortSource(src.source) }}</summary>
+                      <p class="source-content">{{ src.content }}</p>
+                    </details>
+                  }
+                </div>
+              }
+            </div>
+            <span class="ts">{{ formatTime(msg.ts) }}</span>
+          </div>
+        }
+        <div #messagesEnd></div>
+      </div>
+    }
+
+  </div>
+
+  <div class="input-area">
+    <div class="input-wrap" [class.loading]="isLoading">
+      <textarea
+        [(ngModel)]="input"
+        (keydown)="onKeydown($event)"
+        placeholder="Posez votre question… (Entrée pour envoyer)"
+        rows="1"
+        [disabled]="isLoading"
+        class="chat-input"
+      ></textarea>
+      <button class="send-btn" (click)="send()" [disabled]="!input.trim() || isLoading">
+        @if (!isLoading) {
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/>
+          </svg>
+        }
+        @if (isLoading) {
+          <svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+            <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+          </svg>
+        }
+      </button>
+    </div>
+    <p class="hint">Maj+Entrée pour nouvelle ligne</p>
+  </div>
+
+</div>
