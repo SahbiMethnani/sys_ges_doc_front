@@ -1,0 +1,48 @@
+<div class="auth-page">
+  <div class="auth-panel">
+    <div class="auth-brand">
+      <span class="brand-icon">◈</span>
+      <h1>DocRAG</h1>
+      <p>Connexion LDAP</p>
+    </div>
+
+    <form class="auth-form" (ngSubmit)="submit()" autocomplete="on">
+      <label class="field">
+        <span>Identifiant</span>
+        <input
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          placeholder="uid LDAP"
+          autocomplete="username"
+          [disabled]="loading"
+        />
+      </label>
+
+      <label class="field">
+        <span>Mot de passe</span>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+          [disabled]="loading"
+        />
+      </label>
+
+      @if (error) {
+        <p class="auth-error">{{ error }}</p>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="loading">
+        {{ loading ? 'Connexion…' : 'Se connecter' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Pas encore de compte ?
+      <a routerLink="/register">Créer un compte</a>
+    </p>
+  </div>
+</div>

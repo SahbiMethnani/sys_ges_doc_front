@@ -1,0 +1,74 @@
+<div class="auth-page">
+  <div class="auth-panel">
+    <div class="auth-brand">
+      <span class="brand-icon">◈</span>
+      <h1>DocRAG</h1>
+      <p>Créer un compte LDAP</p>
+    </div>
+
+    <form class="auth-form" (ngSubmit)="submit()" autocomplete="on">
+      <label class="field">
+        <span>Identifiant *</span>
+        <input
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          placeholder="uid"
+          autocomplete="username"
+          [disabled]="loading"
+        />
+      </label>
+
+      <label class="field">
+        <span>Mot de passe *</span>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="••••••••"
+          autocomplete="new-password"
+          [disabled]="loading"
+        />
+      </label>
+
+      <label class="field">
+        <span>Nom affiché</span>
+        <input
+          type="text"
+          name="displayName"
+          [(ngModel)]="displayName"
+          placeholder="Optionnel"
+          [disabled]="loading"
+        />
+      </label>
+
+      <label class="field">
+        <span>Email</span>
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="optionnel@exemple.com"
+          autocomplete="email"
+          [disabled]="loading"
+        />
+      </label>
+
+      @if (error) {
+        <p class="auth-error">{{ error }}</p>
+      }
+      @if (success) {
+        <p class="auth-success">{{ success }}</p>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="loading">
+        {{ loading ? 'Création…' : "S'inscrire" }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Déjà un compte ?
+      <a routerLink="/login">Se connecter</a>
+    </p>
+  </div>
+</div>

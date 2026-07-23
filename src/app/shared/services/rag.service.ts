@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface QueryRequest   { question: string; show_sources?: boolean; }
 export interface SourceDocument { source: string; content: string; }
@@ -13,7 +14,7 @@ export interface MessageResponse{ message: string; }
 
 @Injectable({ providedIn: 'root' })
 export class RagService {
-  private readonly api = 'http://localhost:8000';
+  private readonly api = environment.apiUrl;
   constructor(private http: HttpClient) {}
 
   getStatus(): Observable<StatusResponse> {
