@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../auth.service';
-
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -14,6 +14,7 @@ import { AuthService } from '../auth.service';
 export class RegisterComponent {
   username = '';
   password = '';
+  confirmPassword = '';
   displayName = '';
   email = '';
   error = '';
@@ -32,8 +33,16 @@ export class RegisterComponent {
       this.error = 'Identifiant et mot de passe requis.';
       return;
     }
-    if (this.password.length < 4) {
-      this.error = 'Le mot de passe doit contenir au moins 4 caractères.';
+    if (this.password.length < 8)  {
+      this.error = 'Le mot de passe doit contenir au moins 8 caractères.';
+      return;
+    }
+    if (this.password.length > 128) {
+      this.error = 'Le mot de passe ne peut pas dépasser 128 caractères.';
+      return;
+    }
+    if (this.password !== this.confirmPassword) {
+      this.error = 'Les deux mots de passe ne correspondent pas.';
       return;
     }
 

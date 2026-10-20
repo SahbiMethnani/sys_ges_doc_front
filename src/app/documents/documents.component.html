@@ -63,6 +63,9 @@
         <span>Fichier</span><span>Type</span><span>Taille</span><span></span>
       </div>
 
+      <div class="doc-list-body">
+
+
       @if (isLoading) {
         <div class="list-empty">
           @for (i of [1,2,3]; track i) { <div class="skeleton"></div> }
@@ -92,6 +95,6 @@
         </div>
       }
     </div>
-
+    </div>
   </div>
 </div>

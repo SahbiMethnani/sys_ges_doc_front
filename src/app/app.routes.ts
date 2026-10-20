@@ -15,6 +15,22 @@ export const routes: Routes = [
       import('./auth/register/register.component').then((m) => m.RegisterComponent),
   },
   {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./auth/forgot-password/forgot-password.component').then(
+        (m) => m.ForgotPasswordComponent,
+      ),
+    data: { mode: 'request' },
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./auth/forgot-password/forgot-password.component').then(
+        (m) => m.ForgotPasswordComponent,
+      ),
+    data: { mode: 'reset' },
+  },
+  {
     path: 'chat',
     canActivate: [authGuard],
     loadComponent: () => import('./chat/chat.component').then((m) => m.ChatComponent),

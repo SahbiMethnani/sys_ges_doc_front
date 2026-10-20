@@ -13,11 +13,15 @@ import { AuthService } from './auth/auth.service';
 })
 export class App {
   status: StatusResponse | null = null;
+  isLightTheme = false;
 
   constructor(
     private rag: RagService,
     public auth: AuthService,
   ) {
+    this.isLightTheme = localStorage.getItem('docrag-theme') === 'light';
+    this.applyTheme();
+
     effect(() => {
       if (this.auth.isAuthenticated()) {
         this.loadStatus();
@@ -31,6 +35,12 @@ export class App {
     this.auth.logout();
   }
 
+  toggleTheme(): void {
+    this.isLightTheme = !this.isLightTheme;
+    localStorage.setItem('docrag-theme', this.isLightTheme ? 'light' : 'dark');
+    this.applyTheme();
+  }
+
   displayName(): string {
     const u = this.auth.user();
     return u?.display_name || u?.username || '';
@@ -41,5 +51,9 @@ export class App {
       next: (s) => (this.status = s),
       error: () => (this.status = null),
     });
+  }
+
+  private applyTheme(): void {
+    document.documentElement.dataset['theme'] = this.isLightTheme ? 'light' : 'dark';
   }
 }

@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:unit": "vitest run",
+    "test:html": "vitest run --reporter=html",
+    "e2e": "ng e2e"
   },
   "prettier": {
     "printWidth": 100,
@@ -28,7 +31,9 @@
     "@angular/core": "^21.0.0",
     "@angular/forms": "^21.0.0",
     "@angular/platform-browser": "^21.0.0",
+    "@angular/platform-browser-dynamic": "21.2.1",
     "@angular/router": "^21.0.0",
+    "coverage-v8": "^0.0.1-security",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "^0.16.1"
@@ -37,7 +42,10 @@
     "@angular/build": "^21.0.4",
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.0",
+    "@playwright/test": "1.64.1",
+    "@vitest/ui": "^4.0.18",
     "jsdom": "^27.1.0",
+    "playwright-ng-schematics": "^21.1.1",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   }

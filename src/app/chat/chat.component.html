@@ -25,7 +25,7 @@
     </div>
   </header>
 
-  <div class="messages">
+  <div id="chat-messages" #messagesContainer class="messages" (scroll)="updateScrollbar()">
 
     @if (messages.length === 0) {
       <div class="empty">
@@ -78,7 +78,33 @@
             <span class="ts">{{ formatTime(msg.ts) }}</span>
           </div>
         }
-        <div #messagesEnd></div>
+      </div>
+    }
+
+    @if (showScrollbar) {
+      <div
+        #scrollbarTrack
+        class="messages-scrollbar"
+        role="scrollbar"
+        aria-label="Défilement des messages"
+        aria-controls="chat-messages"
+        aria-orientation="vertical"
+        [attr.aria-valuenow]="messagesContainerValue()"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        tabindex="0"
+        (keydown)="onScrollbarKeydown($event)"
+        (pointerdown)="onScrollbarPointerDown($event)"
+        (pointermove)="onScrollbarPointerMove($event)"
+        (pointerup)="onScrollbarPointerUp($event)"
+        (pointercancel)="onScrollbarPointerUp($event)"
+      >
+        <div
+          class="messages-scrollbar-thumb"
+          [class.dragging]="isDraggingScrollbar"
+          [style.height.px]="scrollbarThumbHeight"
+          [style.transform]="'translateY(' + scrollbarThumbTop + 'px)'"
+        ></div>
       </div>
     }
 

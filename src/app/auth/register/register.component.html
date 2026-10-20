@@ -27,9 +27,30 @@
           [(ngModel)]="password"
           placeholder="••••••••"
           autocomplete="new-password"
+          required
+          minlength="8"
+          maxlength="128"
           [disabled]="loading"
         />
       </label>
+
+      <label class="field">
+        <span>Confirmer le mot de passe *</span>
+        <input
+          type="password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          placeholder="Répétez le mot de passe"
+          autocomplete="new-password"
+          required
+          minlength="8"
+          maxlength="128"
+          [disabled]="loading"
+        />
+      </label>
+      @if (confirmPassword && confirmPassword !== password) {
+        <p class="auth-error">Les deux mots de passe ne correspondent pas.</p>
+      }
 
       <label class="field">
         <span>Nom affiché</span>

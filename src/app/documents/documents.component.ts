@@ -1,4 +1,3 @@
-// src/app/documents/documents.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RagService, DocumentInfo } from '../shared/services/rag.service';
@@ -14,6 +13,7 @@ interface Toast { message: string; type: ToastType; }
   styleUrl: './documents.component.scss',
 })
 export class DocumentsComponent implements OnInit {
+  private readonly maxFileSizeBytes = 20 * 1024 * 1024;
   documents: DocumentInfo[] = [];
   isLoading = false;
   isIndexing = false;
@@ -35,6 +35,7 @@ export class DocumentsComponent implements OnInit {
   onFileSelected(e: Event) {
     const input = e.target as HTMLInputElement;
     if (input.files?.length) this.uploadFiles(Array.from(input.files));
+    input.value = '';
   }
 
   onDrop(e: DragEvent) {
@@ -47,15 +48,40 @@ export class DocumentsComponent implements OnInit {
 
   uploadFiles(files: File[]) {
     const allowed = ['.pdf', '.html', '.txt', '.raw'];
-    const valid = files.filter(f => allowed.some(ext => f.name.toLowerCase().endsWith(ext)));
-    if (!valid.length) { this.showToast('Formats acceptés : PDF, HTML, TXT, RAW', 'error'); return; }
+    const rejected: string[] = [];
+    const valid = files.filter((file) => {
+      const extensionAllowed = allowed.some((ext) => file.name.toLowerCase().endsWith(ext));
+      let reason = '';
+      if (!extensionAllowed) reason = 'format non accepté';
+      else if (file.size === 0) reason = 'fichier vide';
+      else if (file.size > this.maxFileSizeBytes) reason = 'fichier supérieur à 20 MiB';
+      if (reason) rejected.push(`${file.name} : ${reason}`);
+      return !reason;
+    });
+    if (!valid.length) {
+      this.showToast(rejected.join(' · ') || 'Aucun fichier sélectionné.', 'error');
+      return;
+    }
 
     this.isUploading = true;
     let done = 0;
+    let uploaded = 0;
+    const failures: string[] = [];
+    const finish = () => {
+      if (done !== valid.length) return;
+      this.isUploading = false;
+      if (uploaded) this.loadDocuments();
+      const issues = [...rejected, ...failures];
+      const message = issues.length
+        ? `${uploaded} fichier(s) envoyé(s). ${issues.join(' · ')}`
+        : `${uploaded} fichier(s) uploadé(s)`;
+      this.showToast(message, issues.length ? 'error' : 'success');
+    };
+
     valid.forEach(file => {
       this.rag.uploadDocument(file).subscribe({
-        next: () => { if (++done === valid.length) { this.isUploading = false; this.showToast(`${done} fichier(s) uploadé(s)`, 'success'); this.loadDocuments(); } },
-        error: (err) => { if (++done === valid.length) this.isUploading = false; this.showToast(err.message, 'error'); },
+        next: () => { uploaded++; done++; finish(); },
+        error: (err) => { failures.push(`${file.name} : ${err.message}`); done++; finish(); },
       });
     });
   }

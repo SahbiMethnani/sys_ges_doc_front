@@ -28,3 +28,16 @@ export interface User {
 export interface RefreshRequest {
   refresh_token: string;
 }
+
+export interface ForgotPasswordRequest {
+  username: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  new_password: string;
+}
+
+export interface AuthMessageResponse {
+  message: string;
+}

@@ -107,6 +107,17 @@
   padding: 10px 12px;
 }
 
+.auth-forgot-link {
+  align-self: flex-end;
+  margin-top: -10px;
+  color: var(--accent);
+  font-size: 12px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .btn-primary {
   margin-top: 4px;
   background: var(--accent);

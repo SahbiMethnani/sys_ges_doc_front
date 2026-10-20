@@ -10,6 +10,9 @@ import {
   TokenResponse,
   User,
   RefreshRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+  AuthMessageResponse,
 } from './auth.models';
 
 const ACCESS_KEY = 'rag_access_token';
@@ -73,6 +76,18 @@ export class AuthService {
 
   register(body: RegisterRequest): Observable<User> {
     return this.http.post<User>(`${this.api}/auth/register`, body).pipe(catchError(this.handleError));
+  }
+
+  forgotPassword(body: ForgotPasswordRequest): Observable<AuthMessageResponse> {
+    return this.http
+      .post<AuthMessageResponse>(`${this.api}/auth/forgot-password`, body)
+      .pipe(catchError(this.handleError));
+  }
+
+  resetPassword(body: ResetPasswordRequest): Observable<AuthMessageResponse> {
+    return this.http
+      .post<AuthMessageResponse>(`${this.api}/auth/reset-password`, body)
+      .pipe(catchError(this.handleError));
   }
 
   me(): Observable<User> {
